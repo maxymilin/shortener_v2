@@ -11,11 +11,9 @@ from tomlkit import table
 
 class UrlBase(SQLModel):
     key: Optional[str] = Field(
-        default="".join(random.choices(string.ascii_letters, k=5)),
-        primary_key=True
+        default="".join(random.choices(string.ascii_letters, k=5)), primary_key=True
     )
     target_url: str
-
 
 
 class Url(UrlBase, table=True):

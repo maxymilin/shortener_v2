@@ -1,0 +1,39 @@
+{
+    "initial_data": {
+        "url": {
+            "key": "test1",
+            "target_url": "https://www.google.com/"
+        }
+    },
+    "case_create": {
+        "payload": {
+            "key": "test1",
+            "target_url": "https://www.google.com/"
+        },
+        "want": {
+            "key": "test1",
+            "target_url": "https://www.google.com/"
+        },
+        "fail_payload":{
+            "target_url": "fail_url"
+        },
+        "fail_want":{
+            "detail": "Invalid url."
+        }
+    },
+    "case_get": {
+        "payload": {
+            "key": "test1"
+        },
+        "want": {
+            "key": "test1",
+            "target_url": "https://www.google.com/"
+        },
+        "fail_payload": {
+            "key": "fail1"
+        },
+        "fail_want": {
+            "detail": "Invalid short url."
+        }
+    }
+}
