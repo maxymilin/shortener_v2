@@ -1,0 +1,46 @@
+version: '4.12'
+
+services:
+  shortener_app:
+    container_name: app
+    env_file: .env
+    environment:
+      - API_V1_PREFIX=
+      - DEBUG=True
+      - PROJECT_NAME=URL shortener (local)
+      - VERSION=0.1.0
+      - DESCRIPTION=The API URL shortener app.
+      - DB_ASYNC_CONNECTION_STR=postgresql+asyncpg://url_admin:urladminpassword@db/url_db
+      - DB_ASYNC_TEST_CONNECTION_STR=postgresql+asyncpg://url_admin:urladminpassword@test_db/url_test_db
+      - DB_EXCLUDE_TABLES=[]
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    ports:
+      - 5000:5000
+    depends_on:
+      - db
+      - test_db
+    command: sh -c "alembic upgrade head; uvicorn app.main:app --proxy-headers --host 0.0.0.0 --port 5000"
+  db:
+    container_name: db
+    image: postgres:14.0-alpine
+    environment:
+      - POSTGRES_USER=url_admin
+      - POSTGRES_PASSWORD=urladminpassword
+      - POSTGRES_DB=url_db
+    ports:
+      - '5431:5432'
+    volumes:
+      - ./postgres_db/init.sql:/docker-entrypoint-initdb.d/init.sql
+  test_db:
+    container_name: test_db
+    image: postgres:14.0-alpine
+    environment:
+      - POSTGRES_USER=url_admin
+      - POSTGRES_PASSWORD=urladminpassword
+    ports:
+      - '5436:5432'
+    volumes:
+      - ./postgres_test_db/init.sql:/docker-entrypoint-initdb.d/init.sql
+

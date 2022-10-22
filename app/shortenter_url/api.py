@@ -13,7 +13,7 @@ router = APIRouter()
 async def create_url(data: UrlCreate, urls: UrlCRUD = Depends(get_url_crud)):
     url = await urls.create(data=data)
 
-    return url
+    return url.key
 
 
 @router.get("/{key}", response_model=UrlRead, status_code=http_status.HTTP_200_OK)
