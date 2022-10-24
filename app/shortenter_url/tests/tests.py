@@ -17,10 +17,9 @@ async def test_create_url(
     assert response.status_code == 201
 
     got = response.json()
-    want = test_data["case_create"]["want"]
 
-    for key, value in want.items():
-        assert got[key] == value
+    assert got["key"].isalpha() is True
+    assert len(got["key"]) == 5
 
 
 @pytest.mark.asyncio
@@ -50,14 +49,13 @@ async def test_get_url(
 
     response = await async_client.get(f"/url/{url_data['key']}")
 
-    assert response.status_code == 200
-
-    got = response.json()
+    assert response.status_code == 301
+    # Get redirect url from httpx response
+    redirect_url = response.next_request.url
 
     want = test_data["case_get"]["want"]
 
-    for key, value in want.items():
-        assert got[key] == value
+    assert redirect_url == want["target_url"]
 
 
 @pytest.mark.asyncio

@@ -7,11 +7,6 @@
     },
     "case_create": {
         "payload": {
-            "key": "test1",
-            "target_url": "https://www.google.com/"
-        },
-        "want": {
-            "key": "test1",
             "target_url": "https://www.google.com/"
         },
         "fail_payload":{
@@ -26,7 +21,6 @@
             "key": "test1"
         },
         "want": {
-            "key": "test1",
             "target_url": "https://www.google.com/"
         },
         "fail_payload": {
