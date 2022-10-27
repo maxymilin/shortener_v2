@@ -19,8 +19,10 @@ async def test_create_url(
 
     got = response.json()
 
-    assert got["key"].isalpha() is True
-    assert len(got["key"]) == 5
+    key = got["shortened_url"].split("/")[-1]
+
+    assert key.isalnum() is True
+    assert len(key) == 8
 
 
 @pytest.mark.asyncio
@@ -56,7 +58,7 @@ async def test_get_url(
 
     want = test_data["case_get"]["want"]
 
-    assert redirect_url == want["target_url"]
+    assert redirect_url == want["url"]
 
 
 @pytest.mark.asyncio

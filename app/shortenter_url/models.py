@@ -4,13 +4,13 @@ from sqlmodel import Field, SQLModel
 
 
 class UrlBase(SQLModel):
-    target_url: str
+    url: str
 
 
 class Url(SQLModel, table=True):
     __tablename__ = "urls"
 
-    target_url: str
+    url: str
     key: str = Field(primary_key=True)
     count: int = Field(default=1)
 
@@ -21,13 +21,13 @@ class Url(SQLModel, table=True):
 class UrlCreate(Url):
     ...
 
-
 class UrlRead(Url):
     ...
 
 
 class UrlKey(SQLModel):
-    key: str
+    shortened_url: str
+
 
 
 class UrlRedirerect(SQLModel):

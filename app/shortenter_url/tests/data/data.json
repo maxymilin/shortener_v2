@@ -2,15 +2,15 @@
     "initial_data": {
         "url": {
             "key": "test1",
-            "target_url": "https://www.google.com/"
+            "url": "https://www.google.com/"
         }
     },
     "case_create": {
         "payload": {
-            "target_url": "https://www.google.com/"
+            "url": "https://www.google.com/"
         },
         "fail_payload":{
-            "target_url": "fail_url"
+            "url": "fail_url"
         },
         "fail_want":{
             "detail": "Invalid url."
@@ -21,7 +21,7 @@
             "key": "test1"
         },
         "want": {
-            "target_url": "https://www.google.com/"
+            "url": "https://www.google.com/"
         },
         "fail_payload": {
             "key": "fail1"
@@ -32,49 +32,49 @@
     },
     "case_count_2_diff_urls":{
         "payloads": [
-            {"target_url": "https://www.google.com/", "key": "test1"},
-            {"target_url": "https://www.google1.com/", "key": "test2"}
+            {"url": "https://www.google.com/", "key": "test1"},
+            {"url": "https://www.google1.com/", "key": "test2"}
         ],
         "want": {"Calls": 2}
     },
     "case_count_2_diff_users":{
-        "payload": {"target_url": "https://www.google.com/", "key": "test1"},
-        "new_user_data": {"target_url": "https://www.google.com/"},
+        "payload": {"url": "https://www.google.com/", "key": "test1"},
+        "new_user_data": {"url": "https://www.google.com/"},
         "want": {"Calls": 2}
     },
     "case_get_top_10_1": {
-        "payload": {"target_url": "https://www.google.com/", "key": "test1"},
-        "want": [{"Url":{"key":"test1","count":1,"target_url":"https://www.google.com/"}}]
+        "payload": {"turl": "https://www.google.com/", "key": "test1"},
+        "want": [{"Url":{"key":"test1","count":1,"url":"https://www.google.com/"}}]
     },
     "case_get_top_10_ten_records":{
         "payloads":[
-            {"target_url": "https://www.google1.com/", "key": "test01", "count": 99},
-            {"target_url": "https://www.google2.com/", "key": "test02", "count": 88},
-            {"target_url": "https://www.google3.com/", "key": "test03", "count": 77},
-            {"target_url": "https://www.google4.com/", "key": "test04", "count": 66},
-            {"target_url": "https://www.google5.com/", "key": "test05", "count": 55},
-            {"target_url": "https://www.google6.com/", "key": "test06", "count": 44},
-            {"target_url": "https://www.google7.com/", "key": "test07", "count": 33},
-            {"target_url": "https://www.google8.com/", "key": "test08", "count": 22},
-            {"target_url": "https://www.google9.com/", "key": "test09", "count": 11},
-            {"target_url": "https://www.google10.com/", "key": "test10", "count": 9},
-            {"target_url": "https://www.google11.com/", "key": "test11", "count": 8},
-            {"target_url": "https://www.google12.com/", "key": "test12", "count": 7},
-            {"target_url": "https://www.google13.com/", "key": "test13", "count": 6},
-            {"target_url": "https://www.google14.com/", "key": "test14", "count": 5},
-            {"target_url": "https://www.google15.com/", "key": "test15", "count": 4}
+            {"url": "https://www.google1.com/", "key": "test01", "count": 99},
+            {"url": "https://www.google2.com/", "key": "test02", "count": 88},
+            {"url": "https://www.google3.com/", "key": "test03", "count": 77},
+            {"url": "https://www.google4.com/", "key": "test04", "count": 66},
+            {"url": "https://www.google5.com/", "key": "test05", "count": 55},
+            {"url": "https://www.google6.com/", "key": "test06", "count": 44},
+            {"url": "https://www.google7.com/", "key": "test07", "count": 33},
+            {"url": "https://www.google8.com/", "key": "test08", "count": 22},
+            {"url": "https://www.google9.com/", "key": "test09", "count": 11},
+            {"url": "https://www.google10.com/", "key": "test10", "count": 9},
+            {"url": "https://www.google11.com/", "key": "test11", "count": 8},
+            {"url": "https://www.google12.com/", "key": "test12", "count": 7},
+            {"url": "https://www.google13.com/", "key": "test13", "count": 6},
+            {"url": "https://www.google14.com/", "key": "test14", "count": 5},
+            {"url": "https://www.google15.com/", "key": "test15", "count": 4}
         ],
         "want": [
-            {"Url":{"key":"test01","count":99,"target_url":"https://www.google1.com/"}},
-            {"Url":{"key":"test02","count":88,"target_url":"https://www.google2.com/"}},
-            {"Url":{"key":"test03","count":77,"target_url":"https://www.google3.com/"}},
-            {"Url":{"key":"test04","count":66,"target_url":"https://www.google4.com/"}},
-            {"Url":{"key":"test05","count":55,"target_url":"https://www.google5.com/"}},
-            {"Url":{"key":"test06","count":44,"target_url":"https://www.google6.com/"}},
-            {"Url":{"key":"test07","count":33,"target_url":"https://www.google7.com/"}},
-            {"Url":{"key":"test08","count":22,"target_url":"https://www.google8.com/"}},
-            {"Url":{"key":"test09","count":11,"target_url":"https://www.google9.com/"}},
-            {"Url":{"key":"test10","count":9,"target_url":"https://www.google10.com/"}}
+            {"Url":{"key":"test01","count":99,"url":"https://www.google1.com/"}},
+            {"Url":{"key":"test02","count":88,"url":"https://www.google2.com/"}},
+            {"Url":{"key":"test03","count":77,"url":"https://www.google3.com/"}},
+            {"Url":{"key":"test04","count":66,"url":"https://www.google4.com/"}},
+            {"Url":{"key":"test05","count":55,"url":"https://www.google5.com/"}},
+            {"Url":{"key":"test06","count":44,"url":"https://www.google6.com/"}},
+            {"Url":{"key":"test07","count":33,"url":"https://www.google7.com/"}},
+            {"Url":{"key":"test08","count":22,"url":"https://www.google8.com/"}},
+            {"Url":{"key":"test09","count":11,"url":"https://www.google9.com/"}},
+            {"Url":{"key":"test10","count":9,"url":"https://www.google10.com/"}}
         ]
     }
 }

@@ -15,8 +15,8 @@ class UrlCRUD:
 
     async def create(self, data: UrlCreate):
         values = data.dict()
-        target_url = values["target_url"]
-        if not validators.url(target_url):
+        url = values["url"]
+        if not validators.url(url):
             raise HTTPException(
                 status_code=http_status.HTTP_400_BAD_REQUEST, detail="Invalid url."
             )
@@ -41,7 +41,7 @@ class UrlCRUD:
         return url
 
     async def is_exist_url(self, target_url: str):
-        statement = select(Url).where(Url.target_url == target_url)
+        statement = select(Url).where(Url.url == target_url)
         result = await self.session.execute(statement=statement)
         url = result.scalar_one_or_none()
 

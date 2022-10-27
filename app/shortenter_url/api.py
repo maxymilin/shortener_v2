@@ -1,9 +1,12 @@
 import random
 import string
 
-from fastapi import APIRouter, Depends, Request
+
+from fastapi import APIRouter, Depends, Request, Response
 from fastapi.responses import RedirectResponse
 from fastapi import status as http_status
+
+from urllib.parse import urljoin
 
 from app.shortenter_url.crud import UrlCRUD, UserCRUD
 from app.shortenter_url.dependencies import get_url_crud, get_user_crud
@@ -13,7 +16,7 @@ router = APIRouter()
 
 
 async def create_key():
-    return "".join(random.choices(string.ascii_letters, k=5))
+    return "".join(random.choices(string.ascii_letters+string.digits, k=8))
 
 
 @router.post("", response_model=UrlKey, status_code=http_status.HTTP_201_CREATED)
@@ -23,27 +26,25 @@ async def create_url(
     urls: UrlCRUD = Depends(get_url_crud),
     users: UserCRUD = Depends(get_user_crud),
 ):
+    app_url = str(request.url)
     user_ip = request.client.host
-    target_url = data.target_url
+    target_url = data.url
     url = await urls.is_exist_url(target_url=target_url)
     if url:
-        url = UrlKey(key=url.key)
         key_url = url.key
         user = await users.is_exist_user(ip=user_ip, url_key=key_url)
         if not user:
             user = User(ip=user_ip, url_key=key_url)
             await users.create(user)
             await urls.update_count(key_url)
-            return url
     else:
         key = await create_key()
-        data = Url(target_url=data.target_url, key=key)
+        data = Url(url=target_url, key=key)
         url = await urls.create(data=data)
         user = User(ip=user_ip, url_key=key)
         await users.create(user)
 
-    url = UrlKey(key=url.key)
-
+    url = UrlKey(shortened_url=urljoin(app_url, url.key))
     return url
 
 
@@ -63,4 +64,4 @@ async def get_top_10(urls: UrlCRUD = Depends(get_url_crud)):
 async def get_url(key: str, urls: UrlCRUD = Depends(get_url_crud)):
     url = await urls.get(key=key)
 
-    return RedirectResponse(url.target_url, status_code=301)
+    return RedirectResponse(url.url, status_code=301)
