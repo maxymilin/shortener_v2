@@ -7,7 +7,7 @@ from fastapi import status as http_status
 
 from app.shortenter_url.crud import UrlCRUD, UserCRUD
 from app.shortenter_url.dependencies import get_url_crud, get_user_crud
-from app.shortenter_url.models import Url, UrlBase, UrlKey, User
+from app.shortenter_url.models import Url, UrlBase, UrlKey, UrlRead, User
 
 router = APIRouter()
 
@@ -21,20 +21,20 @@ async def create_url(
     data: UrlBase,
     request: Request,
     urls: UrlCRUD = Depends(get_url_crud),
-    users: UserCRUD = Depends(get_user_crud)
+    users: UserCRUD = Depends(get_user_crud),
 ):
     user_ip = request.client.host
     target_url = data.target_url
     url = await urls.is_exist_url(target_url=target_url)
     if url:
-        print("find Url!!!")
+        url = UrlKey(key=url.key)
         key_url = url.key
         user = await users.is_exist_user(ip=user_ip, url_key=key_url)
         if not user:
             user = User(ip=user_ip, url_key=key_url)
             await users.create(user)
-            await urls.update_count(url)
-            return key_url
+            await urls.update_count(key_url)
+            return url
     else:
         key = await create_key()
         data = Url(target_url=data.target_url, key=key)
@@ -42,9 +42,21 @@ async def create_url(
         user = User(ip=user_ip, url_key=key)
         await users.create(user)
 
-    key_url = UrlKey(key=url.key)
+    url = UrlKey(key=url.key)
 
-    return key_url
+    return url
+
+
+@router.get("/count", status_code=http_status.HTTP_200_OK)
+async def get_count(urls: UrlCRUD = Depends(get_url_crud)):
+    count = await urls.get_count()
+
+    return {"Calls": count}
+
+
+@router.get("/top_10", status_code=http_status.HTTP_200_OK)
+async def get_top_10(urls: UrlCRUD = Depends(get_url_crud)):
+    return await urls.top_10()
 
 
 @router.get("/{key}", status_code=http_status.HTTP_301_MOVED_PERMANENTLY)

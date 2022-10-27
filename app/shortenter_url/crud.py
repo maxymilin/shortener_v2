@@ -1,3 +1,4 @@
+from requests import session
 import validators
 
 from fastapi import HTTPException
@@ -5,7 +6,7 @@ from fastapi import status as http_status
 from sqlalchemy import select
 from sqlmodel.ext.asyncio.session import AsyncSession
 
-from app.shortenter_url.models import Url, UrlCreate, User, UserCreate
+from app.shortenter_url.models import Url, UrlCreate, UrlRead, User, UserCreate
 
 
 class UrlCRUD:
@@ -48,12 +49,24 @@ class UrlCRUD:
 
     async def update_count(self, key: str):
         url = await self.get(key=key)
-        url.key += 1
+        url.count += 1
         self.session.add(url)
         await self.session.commit()
         await self.session.refresh(url)
 
         return url
+
+    async def top_10(self):
+        statement = select(Url).order_by(Url.count.desc()).limit(10)
+        result = await self.session.execute(statement=statement)
+        urls = result.all()
+        return urls
+
+    async def get_count(self):
+        statement = select(Url.count)
+        result = await self.session.execute(statement=statement)
+        count = [el[0] for el in result.all()]
+        return sum(count)
 
 
 class UserCRUD:
@@ -63,7 +76,6 @@ class UserCRUD:
     async def create(self, data: UserCreate):
         values = data.dict()
         user = User(**values)
-        print(user)
         self.session.add(user)
         await self.session.commit()
         await self.session.refresh(user)
@@ -71,9 +83,7 @@ class UserCRUD:
         return user
 
     async def is_exist_user(self, ip, url_key):
-        statement = (
-            select(User).where(User.url_key == url_key).where(User.ip == ip)
-        )
+        statement = select(User).where(User.url_key == url_key).where(User.ip == ip)
         result = await self.session.execute(statement=statement)
         user = result.scalar_one_or_none()
 

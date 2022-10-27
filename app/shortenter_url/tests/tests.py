@@ -1,3 +1,4 @@
+import requests
 import pytest
 from httpx import AsyncClient
 from sqlalchemy import insert
@@ -78,3 +79,113 @@ async def test_get_url_fail(
 
     for key, value in want_fail.items():
         assert got[key] == value
+
+
+@pytest.mark.asyncio
+async def test_get_count_null(
+    async_client: AsyncClient, async_session: AsyncSession, test_data: dict
+):
+
+    response = await async_client.get("/url/count")
+
+    assert response.status_code == 200
+    assert response.json() == {"Calls": 0}
+
+
+@pytest.mark.asyncio
+async def test_get_count_1(
+    async_client: AsyncClient, async_session: AsyncSession, test_data: dict
+):
+    url_data = test_data["initial_data"]["url"]
+    statement = insert(Url).values(url_data)
+    await async_session.execute(statement=statement)
+    await async_session.commit()
+    response = await async_client.get("/url/count")
+
+    assert response.status_code == 200
+    assert response.json() == {"Calls": 1}
+
+
+@pytest.mark.asyncio
+async def test_get_count_2_with_2_diff_urls(
+    async_client: AsyncClient, async_session: AsyncSession, test_data: dict
+):
+    payloads = test_data["case_count_2_diff_urls"]["payloads"]
+    for payload in payloads:
+        statement = insert(Url).values(payload)
+        await async_session.execute(statement=statement)
+        await async_session.commit()
+
+    response = await async_client.get("/url/count")
+    want = test_data["case_count_2_diff_urls"]["want"]
+
+    assert response.status_code == 200
+    assert response.json() == want
+
+
+@pytest.mark.asyncio
+async def test_get_count_2_with_2_diff_users(
+    async_client: AsyncClient, async_session: AsyncSession, test_data: dict
+):
+
+    payload = test_data["case_count_2_diff_users"]["payload"]
+    statement = insert(Url).values(payload)
+    await async_session.execute(statement=statement)
+    await async_session.commit()
+
+    new_user_data = test_data["case_count_2_diff_users"]["new_user_data"]
+    await async_client.post("/url", json=new_user_data)
+
+    response = await async_client.get("/url/count")
+    want = test_data["case_count_2_diff_users"]["want"]
+
+    assert response.status_code == 200
+    assert response.json() == want
+
+
+@pytest.mark.asyncio
+async def test_get_top_10_null(async_client: AsyncClient, async_session: AsyncSession):
+    response = await async_client.get("/url/top_10")
+
+    assert response.status_code == 200
+    assert response.json() == []
+
+
+@pytest.mark.asyncio
+async def test_get_top_10_null(async_client: AsyncClient, async_session: AsyncSession):
+    response = await async_client.get("/url/top_10")
+
+    assert response.status_code == 200
+    assert response.json() == []
+
+
+@pytest.mark.asyncio
+async def test_get_top_10_one_record(
+    async_client: AsyncClient, async_session: AsyncSession, test_data: dict
+):
+    url_data = test_data["initial_data"]["url"]
+    statement = insert(Url).values(url_data)
+    await async_session.execute(statement=statement)
+    await async_session.commit()
+    response = await async_client.get("/url/top_10")
+
+    want = test_data["case_get_top_10_1"]["want"]
+    assert response.status_code == 200
+    assert response.json() == want
+
+
+@pytest.mark.asyncio
+async def test_get_top_10_ten_records(
+    async_client: AsyncClient, async_session: AsyncSession, test_data: dict
+):
+    payloads = test_data["case_get_top_10_ten_records"]["payloads"]
+    for payload in payloads:
+        statement = insert(Url).values(payload)
+        await async_session.execute(statement=statement)
+        await async_session.commit()
+
+    response = await async_client.get("/url/top_10")
+
+    want = test_data["case_get_top_10_ten_records"]["want"]
+    assert response.status_code == 200
+    assert response.json() == want

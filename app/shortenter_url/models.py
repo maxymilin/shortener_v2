@@ -1,5 +1,4 @@
 from typing import Optional
-from sqlalchemy import ForeignKey
 
 from sqlmodel import Field, SQLModel
 
@@ -45,6 +44,7 @@ class User(SQLModel, table=True):
 
     class Config:
         orm_mode = True
+
 
 class UserCreate(User):
     ...
