@@ -2,12 +2,12 @@
 
 ### To start:
 
-'''bash
+```bash
 docker-compose up -d --build
-'''
+```
 
 ### Run tests:
 
-'''bash
+```bash
 docker-compose exec shortener_app pytest .
-'''
+```
