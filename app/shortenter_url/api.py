@@ -1,7 +1,6 @@
 import random
 import string
 
-
 from fastapi import APIRouter, Depends, Request, Response
 from fastapi.responses import RedirectResponse
 from fastapi import status as http_status
@@ -19,14 +18,15 @@ async def create_key():
     return "".join(random.choices(string.ascii_letters+string.digits, k=8))
 
 
-@router.post("", response_model=UrlKey, status_code=http_status.HTTP_201_CREATED)
+@router.post("/shorten_url", response_model=UrlKey, status_code=http_status.HTTP_201_CREATED)
 async def create_url(
     data: UrlBase,
     request: Request,
     urls: UrlCRUD = Depends(get_url_crud),
     users: UserCRUD = Depends(get_user_crud),
 ):
-    app_url = str(request.url)
+    app_url = urljoin(str(request.url), "/url")
+    print(app_url)
     user_ip = request.client.host
     target_url = data.url
     url = await urls.is_exist_url(target_url=target_url)

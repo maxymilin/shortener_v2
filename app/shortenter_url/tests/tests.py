@@ -13,7 +13,7 @@ async def test_create_url(
 ):
     payload = test_data["case_create"]["payload"]
 
-    response = await async_client.post("/url", json=payload)
+    response = await async_client.post("/shorten_url", json=payload)
 
     assert response.status_code == 201
 
@@ -30,7 +30,7 @@ async def test_create_url_fail(
     async_client: AsyncClient, async_session: AsyncSession, test_data: dict
 ):
     payload_fail = test_data["case_create"]["fail_payload"]
-    response = await async_client.post("/url", json=payload_fail)
+    response = await async_client.post("shorten_url", json=payload_fail)
 
     assert response.status_code == 400
 
@@ -50,7 +50,7 @@ async def test_get_url(
     await async_session.execute(statement=statement)
     await async_session.commit()
 
-    response = await async_client.get(f"/url/{url_data['key']}")
+    response = await async_client.get(f"/{url_data['key']}")
 
     assert response.status_code == 301
     # Get redirect url from httpx response
@@ -72,7 +72,7 @@ async def test_get_url_fail(
 
     failed_key = test_data["case_get"]["fail_payload"]
 
-    response = await async_client.get(f"/url/{failed_key}")
+    response = await async_client.get(f"/{failed_key}")
 
     assert response.status_code == 404
 
@@ -88,7 +88,7 @@ async def test_get_count_null(
     async_client: AsyncClient, async_session: AsyncSession, test_data: dict
 ):
 
-    response = await async_client.get("/url/count")
+    response = await async_client.get("/count")
 
     assert response.status_code == 200
     assert response.json() == {"Calls": 0}
@@ -102,7 +102,7 @@ async def test_get_count_1(
     statement = insert(Url).values(url_data)
     await async_session.execute(statement=statement)
     await async_session.commit()
-    response = await async_client.get("/url/count")
+    response = await async_client.get("/count")
 
     assert response.status_code == 200
     assert response.json() == {"Calls": 1}
@@ -118,7 +118,7 @@ async def test_get_count_2_with_2_diff_urls(
         await async_session.execute(statement=statement)
         await async_session.commit()
 
-    response = await async_client.get("/url/count")
+    response = await async_client.get("/count")
     want = test_data["case_count_2_diff_urls"]["want"]
 
     assert response.status_code == 200
@@ -136,9 +136,9 @@ async def test_get_count_2_with_2_diff_users(
     await async_session.commit()
 
     new_user_data = test_data["case_count_2_diff_users"]["new_user_data"]
-    await async_client.post("/url", json=new_user_data)
+    await async_client.post("shorten_url", json=new_user_data)
 
-    response = await async_client.get("/url/count")
+    response = await async_client.get("/count")
     want = test_data["case_count_2_diff_users"]["want"]
 
     assert response.status_code == 200
@@ -147,7 +147,7 @@ async def test_get_count_2_with_2_diff_users(
 
 @pytest.mark.asyncio
 async def test_get_top_10_null(async_client: AsyncClient, async_session: AsyncSession):
-    response = await async_client.get("/url/top_10")
+    response = await async_client.get("/top_10")
 
     assert response.status_code == 200
     assert response.json() == []
@@ -155,7 +155,7 @@ async def test_get_top_10_null(async_client: AsyncClient, async_session: AsyncSe
 
 @pytest.mark.asyncio
 async def test_get_top_10_null(async_client: AsyncClient, async_session: AsyncSession):
-    response = await async_client.get("/url/top_10")
+    response = await async_client.get("/top_10")
 
     assert response.status_code == 200
     assert response.json() == []
@@ -169,7 +169,7 @@ async def test_get_top_10_one_record(
     statement = insert(Url).values(url_data)
     await async_session.execute(statement=statement)
     await async_session.commit()
-    response = await async_client.get("/url/top_10")
+    response = await async_client.get("/top_10")
 
     want = test_data["case_get_top_10_1"]["want"]
     assert response.status_code == 200
@@ -186,7 +186,7 @@ async def test_get_top_10_ten_records(
         await async_session.execute(statement=statement)
         await async_session.commit()
 
-    response = await async_client.get("/url/top_10")
+    response = await async_client.get("/top_10")
 
     want = test_data["case_get_top_10_ten_records"]["want"]
     assert response.status_code == 200
