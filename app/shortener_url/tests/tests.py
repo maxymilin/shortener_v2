@@ -4,7 +4,7 @@ from httpx import AsyncClient
 from sqlalchemy import insert
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.shortenter_url.models import Url
+from app.shortener_url.models import Url
 
 
 @pytest.mark.asyncio

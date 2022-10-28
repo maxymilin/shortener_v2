@@ -7,9 +7,9 @@ from fastapi import status as http_status
 
 from urllib.parse import urljoin
 
-from app.shortenter_url.crud import UrlCRUD, UserCRUD
-from app.shortenter_url.dependencies import get_url_crud, get_user_crud
-from app.shortenter_url.models import Url, UrlBase, UrlKey, UrlRead, User
+from app.shortener_url.crud import UrlCRUD, UserCRUD
+from app.shortener_url.dependencies import get_url_crud, get_user_crud
+from app.shortener_url.models import Url, UrlBase, UrlKey, UrlRead, User
 
 router = APIRouter()
 

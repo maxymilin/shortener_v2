@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 
-from app.shortenter_url.api import router as url_app_router
+from app.shortener_url.api import router as url_app_router
 
 api_router = APIRouter()
 

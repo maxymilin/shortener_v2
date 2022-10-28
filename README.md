@@ -1,5 +1,7 @@
 # shortener_v2
 
+## Quick start
+
 ### To start:
 
 ```bash

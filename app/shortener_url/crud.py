@@ -6,7 +6,7 @@ from fastapi import status as http_status
 from sqlalchemy import select
 from sqlmodel.ext.asyncio.session import AsyncSession
 
-from app.shortenter_url.models import Url, UrlCreate, UrlRead, User, UserCreate
+from app.shortener_url.models import Url, UrlCreate, UrlRead, User, UserCreate
 
 
 class UrlCRUD:
