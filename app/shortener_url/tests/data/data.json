@@ -35,12 +35,12 @@
             {"url": "https://www.google.com/", "key": "test1"},
             {"url": "https://www.google1.com/", "key": "test2"}
         ],
-        "want": {"Calls": 2}
+        "want": {"calls": 2}
     },
     "case_count_2_diff_users":{
         "payload": {"url": "https://www.google.com/", "key": "test1"},
         "new_user_data": {"url": "https://www.google.com/"},
-        "want": {"Calls": 2}
+        "want": {"calls": 2}
     },
     "case_get_top_10_1": {
         "payload": {"turl": "https://www.google.com/", "key": "test1"},

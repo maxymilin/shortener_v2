@@ -91,7 +91,7 @@ async def test_get_count_null(
     response = await async_client.get("/count")
 
     assert response.status_code == 200
-    assert response.json() == {"Calls": 0}
+    assert response.json() == {"calls": 0}
 
 
 @pytest.mark.asyncio
@@ -105,7 +105,7 @@ async def test_get_count_1(
     response = await async_client.get("/count")
 
     assert response.status_code == 200
-    assert response.json() == {"Calls": 1}
+    assert response.json() == {"calls": 1}
 
 
 @pytest.mark.asyncio

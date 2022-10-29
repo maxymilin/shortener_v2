@@ -1,8 +1,9 @@
-import os
 from pydantic import BaseSettings
 
 
 class Settings(BaseSettings):
+    """Read variables from evelopment with Settings declaration."""
+
     # Base
     api_v1_prefix: str
     debug: bool
